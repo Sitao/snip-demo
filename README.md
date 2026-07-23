@@ -5,6 +5,7 @@ Snip is a tiny URL shortener that demonstrates one backend with two different cl
 - `backend/`: Bun API server with in-memory storage
 - `frontend/`: Angular web UI
 - `cli/`: zero-dependency Node CLI
+- `bundle/`: generated release branch containing the server, built UI, and CLI
 
 Each folder on `main` is a Git submodule pinned to a branch of this same repository, so the superproject records one reproducible snapshot of the whole app.
 
@@ -21,6 +22,7 @@ Each folder on `main` is a Git submodule pinned to a branch of this same reposit
 ```text
 snip-demo/
 ├── backend/   Bun API submodule tracking branch backend
+├── bundle/    Generated release submodule tracking branch bundle
 ├── frontend/  Angular app submodule tracking branch frontend
 ├── cli/       Node CLI submodule tracking branch cli
 └── .gitmodules
@@ -64,6 +66,14 @@ cd cli
 node cli.js ls
 ```
 
+Run the generated release bundle as one process:
+
+```bash
+node scripts/build-bundle.mjs
+cd bundle
+bun start
+```
+
 The frontend and CLI both talk to the backend on `http://localhost:3000` by default.
 
 ## Updating a layer
@@ -88,3 +98,13 @@ git push
 ```
 
 Use the same flow for `frontend` and `cli`.
+
+## Release bundle
+
+`bundle/` is generated output, not hand-edited source. Rebuild it from `main` with:
+
+```bash
+node scripts/build-bundle.mjs
+```
+
+Add `--push` to publish the generated `bundle` branch and the updated submodule pointers on `main`.
