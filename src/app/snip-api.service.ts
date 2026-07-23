@@ -2,6 +2,19 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 
+function resolveBaseUrl(): string {
+  if (typeof window === 'undefined') {
+    return 'http://localhost:3000';
+  }
+
+  const { hostname, origin } = window.location;
+  if (hostname === 'localhost' || hostname === '127.0.0.1') {
+    return 'http://localhost:3000';
+  }
+
+  return origin;
+}
+
 export type SnipLink = {
   code: string;
   url: string;
@@ -13,7 +26,7 @@ export type SnipLink = {
 @Injectable({ providedIn: 'root' })
 export class SnipApiService {
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = 'http://localhost:3000';
+  readonly baseUrl = resolveBaseUrl();
 
   createLink(url: string): Promise<SnipLink> {
     return firstValueFrom(

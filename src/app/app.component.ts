@@ -80,7 +80,7 @@ export class AppComponent {
         return apiError;
       }
       if (error.status === 0) {
-        return 'Cannot reach backend at http://localhost:3000.';
+        return `Cannot reach backend at ${this.api.baseUrl}.`;
       }
       return `Request failed (${error.status}).`;
     }
