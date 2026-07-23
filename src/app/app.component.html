@@ -1,12 +1,13 @@
-<main class="container">
-  <section class="panel">
-    <h1>Snip</h1>
-    <p class="subtitle">Shorten URLs with your local backend.</p>
+<main class="page">
+  <section class="hero panel">
+    <h1 class="hero-title">Short links, zero fuss.</h1>
+    <p class="hero-subtitle">Paste a URL, generate a short code, and track hits from one compact dashboard.</p>
 
-    <form class="url-form" (ngSubmit)="submit()">
-      <label for="url">URL</label>
-      <div class="row">
+    <form class="composer" (ngSubmit)="submit()">
+      <label class="sr-only" for="url">URL</label>
+      <div class="composer-shell">
         <input
+          class="composer-input"
           id="url"
           type="url"
           name="url"
@@ -16,25 +17,25 @@
           [disabled]="submitting()"
           required
         />
-        <button type="submit" [disabled]="submitting()">
+        <button class="composer-action" type="submit" [disabled]="submitting()">
           {{ submitting() ? 'Saving...' : 'Shorten' }}
         </button>
       </div>
     </form>
 
     @if (createdLink(); as link) {
-      <p class="ok">Created: <a [href]="link.shortUrl" target="_blank" rel="noopener">{{ link.shortUrl }}</a></p>
+      <p class="notice notice-ok">Created: <a [href]="link.shortUrl" target="_blank" rel="noopener">{{ link.shortUrl }}</a></p>
     }
 
     @if (error()) {
-      <p class="error">{{ error() }}</p>
+      <p class="notice notice-error">{{ error() }}</p>
     }
   </section>
 
-  <section class="panel">
+  <section class="panel table-panel">
     <div class="table-head">
       <h2>Links</h2>
-      <button type="button" (click)="loadLinks()" [disabled]="loading()">{{ loading() ? 'Loading...' : 'Refresh' }}</button>
+      <button class="ghost-btn" type="button" (click)="loadLinks()" [disabled]="loading()">{{ loading() ? 'Loading...' : 'Refresh' }}</button>
     </div>
 
     @if (links().length === 0) {
