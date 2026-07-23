@@ -1,0 +1,65 @@
+<main class="container">
+  <section class="panel">
+    <h1>Snip</h1>
+    <p class="subtitle">Shorten URLs with your local backend.</p>
+
+    <form class="url-form" (ngSubmit)="submit()">
+      <label for="url">URL</label>
+      <div class="row">
+        <input
+          id="url"
+          type="url"
+          name="url"
+          placeholder="https://example.com"
+          [ngModel]="urlInput()"
+          (ngModelChange)="urlInput.set($event)"
+          [disabled]="submitting()"
+          required
+        />
+        <button type="submit" [disabled]="submitting()">
+          {{ submitting() ? 'Saving...' : 'Shorten' }}
+        </button>
+      </div>
+    </form>
+
+    @if (createdLink(); as link) {
+      <p class="ok">Created: <a [href]="link.shortUrl" target="_blank" rel="noopener">{{ link.shortUrl }}</a></p>
+    }
+
+    @if (error()) {
+      <p class="error">{{ error() }}</p>
+    }
+  </section>
+
+  <section class="panel">
+    <div class="table-head">
+      <h2>Links</h2>
+      <button type="button" (click)="loadLinks()" [disabled]="loading()">{{ loading() ? 'Loading...' : 'Refresh' }}</button>
+    </div>
+
+    @if (links().length === 0) {
+      <p class="empty">No links yet.</p>
+    } @else {
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th>Original URL</th>
+              <th>Hits</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (link of links(); track trackByCode($index, link)) {
+              <tr>
+                <td><a [href]="link.shortUrl" target="_blank" rel="noopener">{{ link.code }}</a></td>
+                <td class="url-cell">{{ link.url }}</td>
+                <td>{{ link.hits }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+</main>
